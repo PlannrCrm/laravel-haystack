@@ -39,7 +39,7 @@ class TestCase extends Orchestra
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', config()->get('haystack.db_connection'));
         config()->set('database.connections.testing.foreign_key_constraints', true);
@@ -59,7 +59,7 @@ class TestCase extends Orchestra
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function setupForMySqlTest()
+    public function setupForMySqlTest(): void
     {
         config()->set('haystack.db_connection', 'mysql');
         config()->set('database.default', 'mysql');
@@ -84,7 +84,7 @@ class TestCase extends Orchestra
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function setupForPgSqlTest()
+    public function setupForPgSqlTest(): void
     {
         config()->set('haystack.db_connection', 'pgsql');
         config()->set('database.default', 'pgsql');
