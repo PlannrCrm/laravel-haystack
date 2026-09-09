@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Sammyjo20\LaravelHaystack\Tests\TestCase;
+use Laravel\SerializableClosure\SerializableClosure;
 use Sammyjo20\LaravelHaystack\HaystackServiceProvider;
 
 uses(TestCase::class)->in(__DIR__);
@@ -29,4 +30,9 @@ function withJobsTable(): void
 
     $migration = include __DIR__.'/Migrations/create_failed_jobs_table.php';
     $migration->up();
+}
+
+function invokeSerializableClosures(array $closures): array
+{
+    return array_map(static fn (SerializableClosure $closure) => $closure(), $closures);
 }

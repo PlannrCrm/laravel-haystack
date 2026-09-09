@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Queue;
 use Sammyjo20\LaravelHaystack\Models\Haystack;
 use Sammyjo20\LaravelHaystack\Models\HaystackBale;
 use Sammyjo20\LaravelHaystack\Data\HaystackOptions;
-use Laravel\SerializableClosure\SerializableClosure;
 use Sammyjo20\LaravelHaystack\Data\CallbackCollection;
 use Sammyjo20\LaravelHaystack\Middleware\CheckAttempts;
 use Sammyjo20\LaravelHaystack\Middleware\CheckFinished;
@@ -221,10 +220,10 @@ test('a haystack can have closures', function () {
 
     expect($callbacks)->toBeInstanceOf(CallbackCollection::class);
 
-    expect($callbacks->onThen)->toEqual([new SerializableClosure($closureA)]);
-    expect($callbacks->onCatch)->toEqual([new SerializableClosure($closureB)]);
-    expect($callbacks->onFinally)->toEqual([new SerializableClosure($closureC)]);
-    expect($callbacks->onPaused)->toEqual([new SerializableClosure($closureC)]);
+    expect(invokeSerializableClosures($callbacks->onThen))->toEqual(['A']);
+    expect(invokeSerializableClosures($callbacks->onCatch))->toEqual(['B']);
+    expect(invokeSerializableClosures($callbacks->onFinally))->toEqual(['C']);
+    expect(invokeSerializableClosures($callbacks->onPaused))->toEqual(['D']);
 });
 
 test('a haystack can have multiple closures for each method', function (string $method) {
@@ -255,12 +254,7 @@ test('a haystack can have multiple closures for each method', function (string $
 
     expect($callbacks->$callbackMethod)->toBeArray();
 
-    expect($callbacks->$callbackMethod)->toEqual([
-        new SerializableClosure($closureA),
-        new SerializableClosure($closureB),
-        new SerializableClosure($closureC),
-        new SerializableClosure($closureC),
-    ]);
+    expect(invokeSerializableClosures($callbacks->$callbackMethod))->toEqual(['A', 'B', 'C', 'D']);
 })->with([
     'then', 'catch', 'finally', 'paused',
 ]);
